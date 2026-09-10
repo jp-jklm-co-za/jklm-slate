@@ -42,22 +42,23 @@ Add the `.slate` class to a root element to scope the reset and base styles.
 
 ## Theming
 
-Every color and token is a CSS custom property. Override them on `:root` or a
-scoped container to theme the whole tree. Tokens use oklch colors, mirroring
-the shadcn/TweakCN convention.
+Every color, font, radius, and shadow is a CSS custom property (token set
+adapted from a TweakCN/shadcn theme). Override them on `:root` or a scoped
+component to retheme the whole tree — components never hard-code values, they
+derive from these tokens.
 
 ```css
 :root {
-  --slate-brand: oklch(0.55 0.22 240);
-  --slate-radius: 0.375rem;
-  --slate-background: oklch(0.985 0 0);
+  --slate-primary: #d33682;
+  --slate-radius: 0.25rem;
+  --slate-background: #fdf6e3;
 }
 ```
 
-Dark mode is built in — add `data-theme="dark"` to `<html>`:
+Dark mode is built in — add the `.dark` class (or `data-theme="dark"`) to `<html>`:
 
 ```html
-<html data-theme="dark">
+<html class="dark">
 ```
 
 ## Available pieces
