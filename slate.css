@@ -1,0 +1,336 @@
+/*! slate v0.1.0 — Lightweight CSS-only design system for JKLM mini-apps.
+ * TweakCN-style theme variables + Bootstrap-like utilities, .slate-* prefixed.
+ * License: MIT */
+
+/* ============================================================
+   THEME TOKENS (CSS custom properties)
+   Override these on :root or a scoped container to theme the app.
+   Mirrors the shadcn/tweakcn variable convention (oklch colors).
+   ============================================================ */
+:root {
+  /* Base palette (light default) */
+  --slate-background: oklch(1 0 0);
+  --slate-foreground: oklch(0.145 0 0);
+
+  --slate-card: oklch(1 0 0);
+  --slate-card-foreground: oklch(0.145 0 0);
+  --slate-popover: oklch(1 0 0);
+  --slate-popover-foreground: oklch(0.145 0 0);
+
+  --slate-primary: oklch(0.205 0 0);
+  --slate-primary-foreground: oklch(0.985 0 0);
+  --slate-secondary: oklch(0.97 0 0);
+  --slate-secondary-foreground: oklch(0.205 0 0);
+  --slate-muted: oklch(0.97 0 0);
+  --slate-muted-foreground: oklch(0.556 0 0);
+
+  --slate-accent: oklch(0.97 0 0);
+  --slate-accent-foreground: oklch(0.205 0 0);
+  --slate-destructive: oklch(0.577 0.245 27.325);
+  --slate-destructive-foreground: oklch(0.985 0 0);
+
+  --slate-border: oklch(0.922 0 0);
+  --slate-input: oklch(0.922 0 0);
+  --slate-ring: oklch(0.708 0 0);
+
+  /* Semantic / brand accent (default a neutral; override freely) */
+  --slate-brand: oklch(0.55 0.2 260); /* a blue-ish accent */
+  --slate-brand-foreground: oklch(1 0 0);
+  --slate-success: oklch(0.62 0.17 150);
+  --slate-warning: oklch(0.8 0.15 85);
+  --slate-info: oklch(0.6 0.15 240);
+
+  /* Typography & layout */
+  --slate-radius: 0.5rem;
+  --slate-radius-sm: 0.375rem;
+  --slate-radius-lg: 0.75rem;
+  --slate-font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --slate-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --slate-font-size: 1rem;
+  --slate-line-height: 1.5;
+  --slate-spacing: 1rem;       /* base spacing unit */
+  --slate-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.05);
+  --slate-shadow: 0 1px 3px rgb(0 0 0 / 0.1), 0 1px 2px rgb(0 0 0 / 0.06);
+  --slate-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px rgb(0 0 0 / 0.05);
+
+  --slate-transition: 150ms ease;
+  --slate-container-max: 1200px;
+}
+
+/* Dark theme — toggle via [data-theme="dark"] on <html> */
+[data-theme="dark"] {
+  --slate-background: oklch(0.145 0 0);
+  --slate-foreground: oklch(0.985 0 0);
+  --slate-card: oklch(0.205 0 0);
+  --slate-card-foreground: oklch(0.985 0 0);
+  --slate-popover: oklch(0.205 0 0);
+  --slate-popover-foreground: oklch(0.985 0 0);
+  --slate-primary: oklch(0.985 0 0);
+  --slate-primary-foreground: oklch(0.205 0 0);
+  --slate-secondary: oklch(0.269 0 0);
+  --slate-secondary-foreground: oklch(0.985 0 0);
+  --slate-muted: oklch(0.269 0 0);
+  --slate-muted-foreground: oklch(0.708 0 0);
+  --slate-accent: oklch(0.269 0 0);
+  --slate-accent-foreground: oklch(0.985 0 0);
+  --slate-border: oklch(0.269 0 0);
+  --slate-input: oklch(0.269 0 0);
+  --slate-ring: oklch(0.439 0 0);
+}
+
+/* ============================================================
+   RESET + BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+
+.slate,
+.slate * {
+  margin: 0;
+  padding: 0;
+}
+
+.slate {
+  font-family: var(--slate-font-sans);
+  font-size: var(--slate-font-size);
+  line-height: var(--slate-line-height);
+  color: var(--slate-foreground);
+  background-color: var(--slate-background);
+  -webkit-font-smoothing: antialiased;
+}
+
+.slate h1, .slate h2, .slate h3, .slate h4, .slate h5, .slate h6 {
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--slate-foreground);
+}
+.slate h1 { font-size: 2rem; }
+.slate h2 { font-size: 1.5rem; }
+.slate h3 { font-size: 1.25rem; }
+.slate h4 { font-size: 1rem; }
+.slate a { color: var(--slate-brand); text-decoration: none; }
+.slate a:hover { text-decoration: underline; }
+.slate code, .slate pre { font-family: var(--slate-font-mono); }
+.slate img { max-width: 100%; height: auto; }
+
+/* ============================================================
+   LAYOUT UTILITIES
+   ============================================================ */
+.slate-container { max-width: var(--slate-container-max); margin-inline: auto; padding-inline: var(--slate-spacing); }
+.slate-flex { display: flex; }
+.slate-inline-flex { display: inline-flex; }
+.slate-grid { display: grid; }
+.slate-hidden { display: none; }
+.slate-block { display: block; }
+.slate-inline { display: inline; }
+
+.slate-flex-col { flex-direction: column; }
+.slate-flex-wrap { flex-wrap: wrap; }
+.slate-flex-center { align-items: center; justify-content: center; }
+.slate-items-center { align-items: center; }
+.slate-items-start { align-items: flex-start; }
+.slate-items-end { align-items: flex-end; }
+.slate-justify-center { justify-content: center; }
+.slate-justify-between { justify-content: space-between; }
+.slate-justify-start { justify-content: flex-start; }
+.slate-justify-end { justify-content: flex-end; }
+.slate-gap-1 { gap: calc(var(--slate-spacing) * 0.25); }
+.slate-gap-2 { gap: calc(var(--slate-spacing) * 0.5); }
+.slate-gap-3 { gap: var(--slate-spacing); }
+.slate-gap-4 { gap: calc(var(--slate-spacing) * 1.5); }
+.slate-grow { flex-grow: 1; }
+.slate-shrink-0 { flex-shrink: 0; }
+
+/* Grid columns */
+.slate-grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.slate-grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.slate-grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 768px) {
+  .slate-grid-cols-2, .slate-grid-cols-3, .slate-grid-cols-4 { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   SPACING UTILITIES
+   ============================================================ */
+.slate-m-0 { margin: 0; }
+.slate-mt-1 { margin-top: calc(var(--slate-spacing) * 0.25); }
+.slate-mt-2 { margin-top: calc(var(--slate-spacing) * 0.5); }
+.slate-mt-3 { margin-top: var(--slate-spacing); }
+.slate-mt-4 { margin-top: calc(var(--slate-spacing) * 1.5); }
+.slate-mb-1 { margin-bottom: calc(var(--slate-spacing) * 0.25); }
+.slate-mb-2 { margin-bottom: calc(var(--slate-spacing) * 0.5); }
+.slate-mb-3 { margin-bottom: var(--slate-spacing); }
+.slate-mb-4 { margin-bottom: calc(var(--slate-spacing) * 1.5); }
+.slate-mx-auto { margin-inline: auto; }
+.slate-p-1 { padding: calc(var(--slate-spacing) * 0.25); }
+.slate-p-2 { padding: calc(var(--slate-spacing) * 0.5); }
+.slate-p-3 { padding: var(--slate-spacing); }
+.slate-p-4 { padding: calc(var(--slate-spacing) * 1.5); }
+.slate-px-2 { padding-inline: calc(var(--slate-spacing) * 0.5); }
+.slate-px-3 { padding-inline: var(--slate-spacing); }
+.slate-py-2 { padding-block: calc(var(--slate-spacing) * 0.5); }
+.slate-py-3 { padding-block: var(--slate-spacing); }
+
+/* ============================================================
+   TYPOGRAPHY UTILITIES
+   ============================================================ */
+.slate-text-xs { font-size: 0.75rem; }
+.slate-text-sm { font-size: 0.875rem; }
+.slate-text-base { font-size: var(--slate-font-size); }
+.slate-text-lg { font-size: 1.125rem; }
+.slate-text-xl { font-size: 1.25rem; }
+.slate-text-2xl { font-size: 1.5rem; }
+.slate-text-3xl { font-size: 1.875rem; }
+.slate-font-bold { font-weight: 700; }
+.slate-font-semibold { font-weight: 600; }
+.slate-font-medium { font-weight: 500; }
+.slate-text-muted { color: var(--slate-muted-foreground); }
+.slate-text-primary { color: var(--slate-primary); }
+.slate-text-brand { color: var(--slate-brand); }
+.slate-text-destructive { color: var(--slate-destructive); }
+.slate-text-center { text-align: center; }
+.slate-text-left { text-align: left; }
+.slate-text-right { text-align: right; }
+.slate-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.slate-uppercase { text-transform: uppercase; }
+.slate-lowercase { text-transform: lowercase; }
+.slate-capitalize { text-transform: capitalize; }
+
+/* ============================================================
+   COMPONENTS
+   ============================================================ */
+
+/* Buttons */
+.slate-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--slate-spacing) * 0.25);
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1;
+  border-radius: var(--slate-radius);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color var(--slate-transition), border-color var(--slate-transition), color var(--slate-transition);
+  white-space: nowrap;
+}
+.slate-btn:hover { text-decoration: none; }
+.slate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.slate-btn-primary { background-color: var(--slate-primary); color: var(--slate-primary-foreground); }
+.slate-btn-primary:hover { background-color: color-mix(in oklch, var(--slate-primary) 90%, black); }
+.slate-btn-secondary { background-color: var(--slate-secondary); color: var(--slate-secondary-foreground); }
+.slate-btn-secondary:hover { background-color: color-mix(in oklch, var(--slate-secondary) 92%, black); }
+.slate-btn-outline { background-color: transparent; color: var(--slate-foreground); border-color: var(--slate-border); }
+.slate-btn-outline:hover { background-color: var(--slate-accent); color: var(--slate-accent-foreground); }
+.slate-btn-ghost { background-color: transparent; color: var(--slate-foreground); }
+.slate-btn-ghost:hover { background-color: var(--slate-accent); color: var(--slate-accent-foreground); }
+.slate-btn-destructive { background-color: var(--slate-destructive); color: var(--slate-destructive-foreground); }
+.slate-btn-destructive:hover { background-color: color-mix(in oklch, var(--slate-destructive) 90%, black); }
+.slate-btn-brand { background-color: var(--slate-brand); color: var(--slate-brand-foreground); }
+.slate-btn-brand:hover { background-color: color-mix(in oklch, var(--slate-brand) 90%, black); }
+.slate-btn-link { background-color: transparent; color: var(--slate-brand); text-decoration: underline; }
+.slate-btn-sm { height: 2rem; padding: 0 0.75rem; font-size: 0.75rem; }
+.slate-btn-lg { height: 2.75rem; padding: 0 1.5rem; font-size: 1rem; }
+.slate-btn-block { display: flex; width: 100%; }
+
+/* Cards */
+.slate-card {
+  background-color: var(--slate-card);
+  color: var(--slate-card-foreground);
+  border: 1px solid var(--slate-border);
+  border-radius: var(--slate-radius-lg);
+  box-shadow: var(--slate-shadow);
+}
+.slate-card-header { padding: var(--slate-spacing) var(--slate-spacing) 0; }
+.slate-card-body { padding: var(--slate-spacing); }
+.slate-card-footer { padding: 0 var(--slate-spacing) var(--slate-spacing); }
+.slate-card-title { font-size: 1.125rem; font-weight: 600; }
+.slate-card-description { font-size: 0.875rem; color: var(--slate-muted-foreground); }
+
+/* Badges */
+.slate-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  background-color: var(--slate-secondary);
+  color: var(--slate-secondary-foreground);
+}
+.slate-badge-primary { background-color: var(--slate-primary); color: var(--slate-primary-foreground); }
+.slate-badge-brand { background-color: var(--slate-brand); color: var(--slate-brand-foreground); }
+.slate-badge-success { background-color: var(--slate-success); color: var(--slate-brand-foreground); }
+.slate-badge-warning { background-color: var(--slate-warning); color: var(--slate-brand-foreground); }
+.slate-badge-destructive { background-color: var(--slate-destructive); color: var(--slate-destructive-foreground); }
+
+/* Alerts / callouts */
+.slate-alert {
+  padding: var(--slate-spacing);
+  border-radius: var(--slate-radius);
+  border: 1px solid var(--slate-border);
+  background-color: var(--slate-card);
+  color: var(--slate-foreground);
+}
+.slate-alert-title { font-weight: 600; }
+.slate-alert-success { border-color: var(--slate-success); color: var(--slate-success); }
+.slate-alert-warning { border-color: var(--slate-warning); color: var(--slate-warning); }
+.slate-alert-destructive { border-color: var(--slate-destructive); color: var(--slate-destructive); }
+.slate-alert-info { border-color: var(--slate-info); color: var(--slate-info); }
+
+/* Forms */
+.slate-input,
+.slate-select,
+.slate-textarea {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: var(--slate-foreground);
+  background-color: var(--slate-background);
+  border: 1px solid var(--slate-input);
+  border-radius: var(--slate-radius);
+  transition: border-color var(--slate-transition), box-shadow var(--slate-transition);
+}
+.slate-input:focus,
+.slate-select:focus,
+.slate-textarea:focus {
+  outline: none;
+  border-color: var(--slate-ring);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--slate-ring) 35%, transparent);
+}
+.slate-label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.375rem; }
+
+/* Misc components */
+.slate-separator { height: 1px; background-color: var(--slate-border); border: none; margin: var(--slate-spacing) 0; }
+.slate-divider { border-top: 1px solid var(--slate-border); margin: var(--slate-spacing) 0; }
+.slate-spinner {
+  width: 1rem; height: 1rem;
+  border: 2px solid var(--slate-muted-foreground);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: slate-spin 0.6s linear infinite;
+}
+@keyframes slate-spin { to { transform: rotate(360deg); } }
+
+.slate-rounded { border-radius: var(--slate-radius); }
+.slate-rounded-lg { border-radius: var(--slate-radius-lg); }
+.slate-rounded-full { border-radius: 9999px; }
+.slate-border { border: 1px solid var(--slate-border); }
+.slate-border-0 { border: none; }
+.slate-shadow-sm { box-shadow: var(--slate-shadow-sm); }
+.slate-shadow { box-shadow: var(--slate-shadow); }
+.slate-shadow-lg { box-shadow: var(--slate-shadow-lg); }
+.slate-w-full { width: 100%; }
+.slate-w-auto { width: auto; }
+.slate-h-full { height: 100%; }
+.slate-relative { position: relative; }
+.slate-absolute { position: absolute; }
+.slate-sticky { position: sticky; }
+.slate-top-0 { top: 0; }
+.slate-z-10 { z-index: 10; }
+.slate-z-50 { z-index: 50; }
+.slate-overflow-hidden { overflow: hidden; }
+.slate-object-cover { object-fit: cover; }

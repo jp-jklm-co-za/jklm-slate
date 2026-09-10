@@ -1,0 +1,16 @@
+{
+  "name": "@jklm/slate",
+  "version": "0.1.0",
+  "description": "Lightweight CSS-only design system for JKLM mini-apps. TweakCN-style theme variables + Bootstrap-like utility/component classes, .slate-* prefixed.",
+  "license": "MIT",
+  "main": "slate.css",
+  "files": ["slate.css", "slate.min.css", "README.md"],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "minify": "node scripts/build.mjs --minify"
+  },
+  "keywords": ["css", "design-system", "utility", "bootstrap", "theme", "css-variables"],
+  "devDependencies": {
+    "clean-css": "^5.3.3"
+  }
+}
