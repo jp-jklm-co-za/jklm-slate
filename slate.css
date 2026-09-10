@@ -31,6 +31,23 @@
   --slate-input: #839496;
   --slate-ring: #d33682;
 
+  /* Feedback / status */
+  --slate-success: #859900;
+  --slate-success-foreground: #fdf6e3;
+  --slate-warning: #b58900;
+  --slate-warning-foreground: #fdf6e3;
+  --slate-info: #268bd2;
+  --slate-info-foreground: #fdf6e3;
+
+  /* Disabled */
+  --slate-disabled: #93a1a1;
+  --slate-disabled-foreground: #eee8d5;
+
+  /* Interaction */
+  --slate-focus-width: 2px;
+  --slate-focus-offset: 2px;
+  --slate-touch-target: 2.75rem;
+
   --slate-chart-1: #268bd2;
   --slate-chart-2: #2aa198;
   --slate-chart-3: #d33682;
@@ -97,6 +114,16 @@
   --slate-input: #586e75;
   --slate-ring: #d33682;
 
+  --slate-success: #859900;
+  --slate-success-foreground: #002b36;
+  --slate-warning: #b58900;
+  --slate-warning-foreground: #002b36;
+  --slate-info: #268bd2;
+  --slate-info-foreground: #002b36;
+
+  --slate-disabled: #586e75;
+  --slate-disabled-foreground: #073642;
+
   --slate-chart-1: #268bd2;
   --slate-chart-2: #2aa198;
   --slate-chart-3: #d33682;
@@ -128,6 +155,11 @@
 .slate h4 { font-size: 1rem; }
 .slate a { color: var(--slate-ring); text-decoration: none; }
 .slate a:hover { text-decoration: underline; }
+.slate a:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--slate-focus-width) var(--slate-background), 0 0 0 calc(var(--slate-focus-width) + var(--slate-focus-offset)) var(--slate-ring);
+  border-radius: var(--slate-radius-sm);
+}
 .slate code, .slate pre { font-family: var(--slate-font-mono); }
 .slate img { max-width: 100%; height: auto; }
 
@@ -207,17 +239,31 @@
   justify-content: center;
   gap: calc(var(--slate-spacing) * 1);
   padding: 0.5rem 1rem;
+  min-height: var(--slate-touch-target);
   font-size: 0.875rem;
   font-weight: 500;
   line-height: 1;
   border-radius: var(--slate-radius-md);
   border: 1px solid transparent;
   cursor: pointer;
-  transition: background-color var(--slate-transition), border-color var(--slate-transition), color var(--slate-transition);
+  transition: background-color var(--slate-transition), border-color var(--slate-transition), color var(--slate-transition), box-shadow var(--slate-transition);
   white-space: nowrap;
 }
 .slate-btn:hover { text-decoration: none; }
-.slate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.slate-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--slate-focus-width) var(--slate-background), 0 0 0 calc(var(--slate-focus-width) + var(--slate-focus-offset)) var(--slate-ring);
+}
+.slate-btn:disabled,
+.slate-btn[aria-disabled="true"] {
+  opacity: 1;
+  cursor: not-allowed;
+  background-color: var(--slate-disabled) !important;
+  color: var(--slate-disabled-foreground) !important;
+  border-color: var(--slate-disabled) !important;
+}
+.slate-btn:disabled:hover,
+.slate-btn[aria-disabled="true"]:hover { opacity: 1; }
 .slate-btn-primary { background-color: var(--slate-primary); color: var(--slate-primary-foreground); }
 .slate-btn-primary:hover { opacity: 0.9; }
 .slate-btn-secondary { background-color: var(--slate-secondary); color: var(--slate-secondary-foreground); }
@@ -231,9 +277,13 @@
 .slate-btn-destructive { background-color: var(--slate-destructive); color: var(--slate-destructive-foreground); }
 .slate-btn-destructive:hover { opacity: 0.9; }
 .slate-btn-link { background-color: transparent; color: var(--slate-ring); text-decoration: underline; }
-.slate-btn-sm { padding: 0.25rem 0.75rem; font-size: 0.75rem; }
-.slate-btn-lg { padding: 0.75rem 1.5rem; font-size: 1rem; }
+.slate-btn-sm { padding: 0.25rem 0.75rem; min-height: 2rem; font-size: 0.75rem; }
+.slate-btn-lg { padding: 0.75rem 1.5rem; min-height: 3rem; font-size: 1rem; }
 .slate-btn-block { display: flex; width: 100%; }
+@media (max-width: 480px) {
+  .slate-btn { padding-inline: 0.875rem; }
+  .slate-btn:not(.slate-btn-sm):not(.slate-btn-lg) { white-space: normal; }
+}
 
 /* Cards */
 .slate-card {
@@ -295,6 +345,12 @@
   border-color: var(--slate-ring);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--slate-ring) 30%, transparent);
 }
+.slate-input:disabled, .slate-select:disabled, .slate-textarea:disabled {
+  background-color: var(--slate-disabled);
+  color: var(--slate-disabled-foreground);
+  cursor: not-allowed;
+}
+.slate-input:focus-visible, .slate-select:focus-visible, .slate-textarea:focus-visible { outline: none; }
 .slate-label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.375rem; }
 
 /* Misc */
