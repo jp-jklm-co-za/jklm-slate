@@ -1,0 +1,379 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>@jklm/slate — Playground</title>
+<link rel="stylesheet" href="../slate.css">
+<style>
+  /* Playground chrome (not part of slate.css) */
+  body { margin:0; }
+  .pg-shell { display:flex; min-height:100vh; }
+  .pg-sidebar { width:230px; flex-shrink:0; border-right:1px solid var(--slate-border); background:var(--slate-card); position:sticky; top:0; height:100vh; overflow-y:auto; padding:1rem; }
+  .pg-sidebar a { display:block; padding:0.35rem 0.6rem; border-radius:var(--slate-radius-md); color:var(--slate-foreground); font-size:0.875rem; text-decoration:none; }
+  .pg-sidebar a:hover { background:var(--slate-muted); text-decoration:none; }
+  .pg-main { flex:1; padding:1.5rem 2rem 4rem; max-width:1100px; }
+  .pg-topbar { position:sticky; top:0; z-index:10; display:flex; align-items:center; gap:0.75rem; padding:0.75rem 1rem; background:var(--slate-background); border-bottom:1px solid var(--slate-border); }
+  .pg-search { padding:0.4rem 0.75rem; font-size:0.875rem; border:1px solid var(--slate-input); border-radius:var(--slate-radius-md); background:var(--slate-background); color:var(--slate-foreground); }
+  .pg-section { margin-bottom:2.5rem; scroll-margin-top:4rem; }
+  .pg-swatch-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:0.75rem; }
+  .pg-swatch { border:1px solid var(--slate-border); border-radius:var(--slate-radius-md); overflow:hidden; cursor:pointer; background:var(--slate-card); }
+  .pg-swatch-color { height:64px; }
+  .pg-swatch-label { padding:0.4rem 0.5rem; font-size:0.7rem; font-family:var(--slate-font-mono); }
+  .pg-demo { border:1px solid var(--slate-border); border-radius:var(--slate-radius-lg); background:var(--slate-card); padding:1rem; }
+  .pg-hint { margin-top:0.75rem; font-family:var(--slate-font-mono); font-size:0.7rem; color:var(--slate-muted-foreground); background:var(--slate-popover); border:1px solid var(--slate-border); border-radius:var(--slate-radius-sm); padding:0.3rem 0.5rem; cursor:pointer; display:inline-block; }
+  .pg-hint:hover { color:var(--slate-ring); }
+  .pg-spacing-bar { height:1rem; background:var(--slate-primary); border-radius:2px; }
+  .pg-radius-box { width:72px; height:48px; background:var(--slate-secondary); color:#fff; display:flex; align-items:center; justify-content:center; font-size:0.65rem; font-family:var(--slate-font-mono); }
+  .pg-editor { position:fixed; right:0; top:0; height:100vh; width:320px; z-index:20; background:var(--slate-popover); border-left:1px solid var(--slate-border); box-shadow:var(--slate-shadow-xl); transform:translateX(100%); transition:transform 0.2s ease; overflow-y:auto; padding:1rem; }
+  .pg-editor.open { transform:translateX(0); }
+  .pg-editor label { display:flex; justify-content:space-between; align-items:center; font-size:0.75rem; font-family:var(--slate-font-mono); margin-bottom:0.4rem; gap:0.5rem; }
+  .pg-editor input[type=color] { width:2.2rem; height:1.6rem; padding:0; border:1px solid var(--slate-border); border-radius:4px; background:none; cursor:pointer; }
+  .pg-toast { position:fixed; bottom:1rem; left:50%; transform:translateX(-50%); background:var(--slate-primary); color:var(--slate-primary-foreground); padding:0.4rem 1rem; border-radius:9999px; font-size:0.8rem; opacity:0; transition:opacity 0.2s; pointer-events:none; z-index:30; }
+  .pg-toast.show { opacity:1; }
+  @media (max-width:900px){ .pg-sidebar{display:none;} }
+</style>
+</head>
+<body>
+<div class="slate pg-shell">
+  <aside class="pg-sidebar" id="pgSidebar">
+    <h3 style="font-size:0.9rem; margin-bottom:0.75rem;">@jklm/slate</h3>
+    <a href="#overview">Overview</a>
+    <a href="#colors">Colors</a>
+    <a href="#typography">Typography</a>
+    <a href="#spacing">Spacing &amp; Radius</a>
+    <a href="#shadows">Shadows</a>
+    <a href="#buttons">Buttons</a>
+    <a href="#badges">Badges</a>
+    <a href="#alerts">Alerts</a>
+    <a href="#forms">Forms</a>
+    <a href="#cards">Cards</a>
+    <a href="#misc">Misc</a>
+  </aside>
+  <div style="flex:1; min-width:0;">
+    <div class="pg-topbar">
+      <button class="slate-btn slate-btn-outline slate-btn-sm" id="toggleTheme">Toggle dark</button>
+      <button class="slate-btn slate-btn-secondary slate-btn-sm" id="toggleEditor">Theme editor</button>
+      <input class="pg-search" id="searchBox" type="search" placeholder="Filter sections...">
+      <a class="slate-btn slate-btn-ghost slate-btn-sm" href="https://github.com/jp-jklm-co-za/jklm-slate" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <main class="pg-main" id="content">
+      <section class="pg-section" id="overview">
+        <h1>slate playground</h1>
+        <p class="slate-text-muted">Live preview of <code>../slate.css</code> — every element on this page renders with the working copy, so edits to the CSS (or the theme editor) show up instantly.</p>
+        <hr class="slate-separator">
+        <div class="slate-flex slate-gap-2 slate-flex-wrap slate-items-center">
+          <span class="slate-badge slate-badge-primary">CSS-only</span>
+          <span class="slate-badge slate-badge-secondary">zero dependencies</span>
+          <span class="slate-badge">Solarized tokens</span>
+        </div>
+      </section>
+
+      <section class="pg-section" id="colors">
+        <h2>Colors</h2>
+        <p class="slate-text-muted">Click a swatch to copy the hex.</p>
+        <div class="pg-swatch-grid" id="swatchGrid"></div>
+        <h3 class="slate-mt-4">Chart palette</h3>
+        <div class="pg-swatch-grid" id="chartGrid"></div>
+      </section>
+
+      <section class="pg-section" id="typography">
+        <h2>Typography</h2>
+        <div class="pg-demo">
+          <p><span class="slate-text-sm slate-text-muted">sans:</span> <span style="font-family:var(--slate-font-sans)">Outfit — The quick brown fox jumps over the lazy dog.</span></p>
+          <p class="slate-mt-2"><span class="slate-text-sm slate-text-muted">mono:</span> <span style="font-family:var(--slate-font-mono)">Space Mono — 0O1lI | {} =&gt; =&lt;</span></p>
+        </div>
+        <div class="pg-demo slate-mt-2">
+          <h1>Heading 1 — 2rem</h1><h2>Heading 2 — 1.5rem</h2><h3>Heading 3 — 1.25rem</h3><h4>Heading 4 — 1rem</h4>
+        </div>
+        <div class="pg-demo slate-mt-2 slate-flex slate-gap-3 slate-flex-wrap slate-items-center">
+          <span class="slate-text-xs">text-xs</span><span class="slate-text-sm">text-sm</span><span class="slate-text-base">text-base</span><span class="slate-text-lg">text-lg</span><span class="slate-text-xl">text-xl</span><span class="slate-text-2xl">text-2xl</span>
+        </div>
+        <div class="pg-demo slate-mt-2 slate-flex slate-gap-3 slate-flex-wrap slate-items-center">
+          <span class="slate-font-bold">font-bold</span><span class="slate-font-semibold">font-semibold</span>
+          <span class="slate-text-muted">text-muted</span><span class="slate-text-primary">text-primary</span><span class="slate-text-accent">text-accent</span><span class="slate-text-destructive">text-destructive</span>
+          <span class="slate-truncate" style="max-width:120px">truncate: this text is truncated</span>
+        </div>
+      </section>
+
+      <section class="pg-section" id="spacing">
+        <h2>Spacing &amp; Radius</h2>
+        <div class="pg-demo">
+          <div class="slate-flex slate-flex-col slate-gap-2">
+            <div class="slate-flex slate-items-center slate-gap-2"><span style="width:3rem; font-size:0.7rem; font-family:var(--slate-font-mono)">gap-1</span><div class="pg-spacing-bar" style="width:calc(var(--slate-spacing) * 8 * 1)"></div></div>
+            <div class="slate-flex slate-items-center slate-gap-2"><span style="width:3rem; font-size:0.7rem; font-family:var(--slate-font-mono)">gap-2</span><div class="pg-spacing-bar" style="width:calc(var(--slate-spacing) * 8 * 2)"></div></div>
+            <div class="slate-flex slate-items-center slate-gap-2"><span style="width:3rem; font-size:0.7rem; font-family:var(--slate-font-mono)">gap-3</span><div class="pg-spacing-bar" style="width:calc(var(--slate-spacing) * 8 * 3)"></div></div>
+            <div class="slate-flex slate-items-center slate-gap-2"><span style="width:3rem; font-size:0.7rem; font-family:var(--slate-font-mono)">gap-4</span><div class="pg-spacing-bar" style="width:calc(var(--slate-spacing) * 8 * 4)"></div></div>
+          </div>
+        </div>
+        <div class="pg-demo slate-mt-2 slate-flex slate-gap-3 slate-flex-wrap slate-items-center">
+          <div class="pg-radius-box" style="border-radius:var(--slate-radius-sm)">sm</div>
+          <div class="pg-radius-box" style="border-radius:var(--slate-radius-md)">md</div>
+          <div class="pg-radius-box" style="border-radius:var(--slate-radius-lg)">lg</div>
+          <div class="pg-radius-box" style="border-radius:9999px">full</div>
+        </div>
+      </section>
+
+      <section class="pg-section" id="shadows">
+        <h2>Shadows</h2>
+        <div class="slate-grid slate-grid-cols-4 slate-gap-3" id="shadowGrid"></div>
+      </section>
+      <section class="pg-section" id="buttons">
+        <h2>Buttons</h2>
+        <div class="pg-demo slate-flex slate-gap-2 slate-flex-wrap slate-items-center">
+          <button class="slate-btn slate-btn-primary">Primary</button>
+          <button class="slate-btn slate-btn-secondary">Secondary</button>
+          <button class="slate-btn slate-btn-accent">Accent</button>
+          <button class="slate-btn slate-btn-outline">Outline</button>
+          <button class="slate-btn slate-btn-ghost">Ghost</button>
+          <button class="slate-btn slate-btn-destructive">Destructive</button>
+          <button class="slate-btn slate-btn-link">Link</button>
+          <button class="slate-btn slate-btn-primary" disabled>Disabled</button>
+        </div>
+        <span class="pg-hint" data-copy="slate-btn slate-btn-primary|secondary|accent|outline|ghost|destructive|link|sm|lg|block">slate-btn slate-btn-primary …</span>
+        <div class="pg-demo slate-mt-2 slate-flex slate-gap-2 slate-flex-wrap slate-items-center">
+          <button class="slate-btn slate-btn-primary slate-btn-sm">Small</button>
+          <button class="slate-btn slate-btn-primary">Default</button>
+          <button class="slate-btn slate-btn-primary slate-btn-lg">Large</button>
+        </div>
+        <span class="pg-hint" data-copy="slate-btn-sm / slate-btn-lg">slate-btn-sm · slate-btn-lg</span>
+      </section>
+
+      <section class="pg-section" id="badges">
+        <h2>Badges</h2>
+        <div class="pg-demo slate-flex slate-gap-2 slate-flex-wrap slate-items-center">
+          <span class="slate-badge">Default</span>
+          <span class="slate-badge slate-badge-primary">Primary</span>
+          <span class="slate-badge slate-badge-secondary">Secondary</span>
+          <span class="slate-badge slate-badge-accent">Accent</span>
+          <span class="slate-badge slate-badge-destructive">Destructive</span>
+        </div>
+        <span class="pg-hint" data-copy="slate-badge slate-badge-primary|secondary|accent|destructive">slate-badge slate-badge-primary …</span>
+      </section>
+
+      <section class="pg-section" id="alerts">
+        <h2>Alerts</h2>
+        <div class="slate-flex slate-flex-col slate-gap-2">
+          <div class="pg-demo"><div class="slate-alert"><div class="slate-alert-title">Heads up</div>Default alert with title and body text.</div></div>
+          <div class="pg-demo"><div class="slate-alert slate-alert-destructive"><div class="slate-alert-title">Error</div>slate-alert-destructive</div></div>
+          <div class="pg-demo"><div class="slate-alert slate-alert-accent"><div class="slate-alert-title">Warning</div>slate-alert-accent</div></div>
+          <div class="pg-demo"><div class="slate-alert slate-alert-secondary"><div class="slate-alert-title">Info</div>slate-alert-secondary</div></div>
+        </div>
+        <span class="pg-hint" data-copy="slate-alert slate-alert-title slate-alert-destructive|accent|secondary">slate-alert + variants</span>
+      </section>
+
+      <section class="pg-section" id="forms">
+        <h2>Forms</h2>
+        <div class="pg-demo" style="max-width:420px;">
+          <label class="slate-label" for="fName">Name</label>
+          <input class="slate-input" id="fName" placeholder="slate-input">
+          <label class="slate-label slate-mt-3" for="fSel">Option</label>
+          <select class="slate-select" id="fSel"><option>slate-select</option><option>two</option></select>
+          <label class="slate-label slate-mt-3" for="fTa">Message</label>
+          <textarea class="slate-textarea" id="fTa" rows="3" placeholder="slate-textarea"></textarea>
+          <button class="slate-btn slate-btn-primary slate-mt-3">Submit</button>
+        </div>
+        <span class="pg-hint" data-copy="slate-label slate-input slate-select slate-textarea">slate-label · slate-input · slate-select · slate-textarea</span>
+      </section>
+
+      <section class="pg-section" id="cards">
+        <h2>Cards</h2>
+        <div class="slate-grid slate-grid-cols-3 slate-gap-3">
+          <div class="slate-card">
+            <div class="slate-card-header"><div class="slate-card-title">Card title</div><div class="slate-card-description">slate-card-description</div></div>
+            <div class="slate-card-body">slate-card-body content sits between header and footer.</div>
+            <div class="slate-card-footer slate-flex slate-gap-2"><button class="slate-btn slate-btn-primary slate-btn-sm">Action</button><button class="slate-btn slate-btn-ghost slate-btn-sm">Cancel</button></div>
+          </div>
+          <div class="slate-card slate-p-4"><div class="slate-card-title">Minimal card</div><p class="slate-text-sm slate-text-muted slate-mt-1">Bare .slate-card with .slate-p-4 utility padding.</p></div>
+        </div>
+        <span class="pg-hint" data-copy="slate-card slate-card-header slate-card-body slate-card-footer slate-card-title slate-card-description">slate-card + subcomponents</span>
+      </section>
+
+      <section class="pg-section" id="misc">
+        <h2>Misc</h2>
+        <div class="pg-demo slate-flex slate-gap-3 slate-flex-wrap slate-items-center">
+          <div class="slate-spinner"></div>
+          <span class="slate-text-sm slate-text-muted">slate-spinner</span>
+          <hr class="slate-separator slate-grow" style="max-width:200px; margin:0;">
+          <span class="slate-text-sm slate-text-muted">slate-separator (horizontal)</span>
+        </div>
+        <div class="pg-demo slate-mt-2 slate-flex slate-gap-2 slate-flex-wrap slate-items-center">
+          <span class="slate-badge slate-border slate-rounded">slate-rounded</span>
+          <span class="slate-badge slate-border slate-rounded-md">slate-rounded-md</span>
+          <span class="slate-badge slate-border slate-rounded-lg">slate-rounded-lg</span>
+          <span class="slate-badge slate-border slate-rounded-full">slate-rounded-full</span>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+<!-- Theme editor drawer -->
+<div class="slate pg-editor" id="editor">
+  <div class="slate-flex slate-items-center slate-justify-between slate-mb-2">
+    <strong>Theme editor</strong>
+    <button class="slate-btn slate-btn-ghost slate-btn-sm" id="closeEditor">&times;</button>
+  </div>
+  <div class="slate-flex slate-gap-2 slate-mb-3">
+    <select class="slate-select" id="presetSel">
+      <option value="default">Solarized (default)</option>
+      <option value="ocean">Ocean blue (custom)</option>
+    </select>
+  </div>
+  <div id="pickerList"></div>
+  <div class="slate-flex slate-gap-2 slate-mt-3">
+    <button class="slate-btn slate-btn-primary slate-btn-sm" id="copyCss">Copy CSS</button>
+    <button class="slate-btn slate-btn-outline slate-btn-sm" id="resetTheme">Reset</button>
+  </div>
+</div>
+<div class="pg-toast" id="toast">Copied</div>
+
+<script>
+(function () {
+  var COLOR_VARS = [
+    "background","foreground","card","card-foreground","popover","popover-foreground",
+    "primary","primary-foreground","secondary","secondary-foreground",
+    "muted","muted-foreground","accent","accent-foreground",
+    "destructive","destructive-foreground","border","input","ring"
+  ];
+  var CHART_VARS = ["chart-1","chart-2","chart-3","chart-4","chart-5"];
+  var PRESETS = {
+    default: null,
+    ocean: {
+      "background":"#f5f7fa","foreground":"#1e293b","card":"#ffffff","card-foreground":"#1e293b",
+      "popover":"#ffffff","popover-foreground":"#1e293b","primary":"#2563eb","primary-foreground":"#ffffff",
+      "secondary":"#0ea5e9","secondary-foreground":"#ffffff","muted":"#94a3b8","muted-foreground":"#334155",
+      "accent":"#f59e0b","accent-foreground":"#ffffff","destructive":"#ef4444","destructive-foreground":"#ffffff",
+      "border":"#cbd5e1","input":"#cbd5e1","ring":"#2563eb",
+      "chart-1":"#2563eb","chart-2":"#0ea5e9","chart-3":"#8b5cf6","chart-4":"#f59e0b","chart-5":"#ef4444"
+    }
+  };
+  var hexToRgb = function (h) { h = h.replace("#",""); if (h.length===3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2]; return [parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)]; };
+  var rgbToHex = function (r,g,b) { var p = function (n){ n = Math.max(0,Math.min(255,Math.round(n))); return n.toString(16).padStart(2,"0"); }; return "#"+p(r)+p(g)+p(b); };
+
+  var toast = document.getElementById("toast"), toastTimer;
+  function showToast(msg) { toast.textContent = msg; toast.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(function(){ toast.classList.remove("show"); }, 1400); }
+  function copyText(text, msg) {
+    if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(function(){ showToast(msg); }, function(){ fallbackCopy(text, msg); }); }
+    else fallbackCopy(text, msg);
+  }
+  function fallbackCopy(text, msg) {
+    var ta = document.createElement("textarea"); ta.value = text; ta.style.position="fixed"; ta.style.opacity="0";
+    document.body.appendChild(ta); ta.select(); try { document.execCommand("copy"); showToast(msg); } catch(e){} document.body.removeChild(ta);
+  }
+
+  // --- swatch grids ---
+  function buildSwatches(container, names) {
+    var cs = getComputedStyle(document.documentElement);
+    names.forEach(function (name) {
+      var val = cs.getPropertyValue("--slate-" + name).trim();
+      var wrap = document.createElement("div"); wrap.className = "pg-swatch";
+      var col = document.createElement("div"); col.className = "pg-swatch-color";
+      var lab = document.createElement("div"); lab.className = "pg-swatch-label";
+      lab.textContent = "--slate-" + name + " " + val;
+      col.style.backgroundColor = "var(--slate-" + name + ")";
+      wrap.appendChild(col); wrap.appendChild(lab);
+      wrap.addEventListener("click", function () { copyText(val, "Copied " + val); });
+      container.appendChild(wrap);
+    });
+  }
+  buildSwatches(document.getElementById("swatchGrid"), COLOR_VARS);
+  buildSwatches(document.getElementById("chartGrid"), CHART_VARS);
+
+  // --- shadow grid ---
+  var shadowGrid = document.getElementById("shadowGrid");
+  ["2xs","xs","sm","","md","lg","xl","2xl"].forEach(function (tier) {
+    var name = tier ? "slate-shadow-" + tier : "slate-shadow";
+    var cell = document.createElement("div");
+    cell.className = "slate-card slate-p-3 " + name;
+    cell.style.fontSize = "0.7rem";
+    cell.style.fontFamily = "var(--slate-font-mono)";
+    cell.textContent = "." + name;
+    shadowGrid.appendChild(cell);
+  });
+
+  // --- hints ---
+  document.querySelectorAll(".pg-hint").forEach(function (el) {
+    el.addEventListener("click", function () { copyText(el.getAttribute("data-copy"), "Class names copied"); });
+  });
+
+  // --- theme toggle ---
+  document.getElementById("toggleTheme").addEventListener("click", function () {
+    document.documentElement.classList.toggle("dark");
+  });
+
+  // --- search filter ---
+  document.getElementById("searchBox").addEventListener("input", function (e) {
+    var q = e.target.value.toLowerCase();
+    document.querySelectorAll(".pg-section").forEach(function (s) {
+      s.style.display = !q || s.textContent.toLowerCase().indexOf(q) !== -1 ? "" : "none";
+    });
+  });
+
+  // --- editor drawer ---
+  var editor = document.getElementById("editor");
+  document.getElementById("toggleEditor").addEventListener("click", function(){ editor.classList.toggle("open"); });
+  document.getElementById("closeEditor").addEventListener("click", function(){ editor.classList.remove("open"); });
+
+  var pickerList = document.getElementById("pickerList");
+  var allVars = COLOR_VARS.concat(CHART_VARS);
+  var live = {};
+  allVars.forEach(function (name) {
+    var row = document.createElement("label");
+    var span = document.createElement("span"); span.textContent = "--slate-" + name;
+    var input = document.createElement("input"); input.type = "color";
+    input.setAttribute("data-var", name);
+    row.appendChild(span); row.appendChild(input);
+    pickerList.appendChild(row);
+    live[name] = input;
+    input.addEventListener("input", function () { applyVar(name, input.value); });
+  });
+
+  function baseHex(name) {
+    var cs = getComputedStyle(document.documentElement);
+    var raw = cs.getPropertyValue("--slate-" + name).trim();
+    var probe = document.createElement("div");
+    probe.style.color = raw; probe.style.display = "none";
+    document.body.appendChild(probe);
+    var c = getComputedStyle(probe).color;
+    document.body.removeChild(probe);
+    var m = c.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+    return m ? rgbToHex(+m[1], +m[2], +m[3]) : "#000000";
+  }
+  function refreshPickers() {
+    allVars.forEach(function (name) {
+      var cur = document.documentElement.style.getPropertyValue("--slate-" + name).trim();
+      live[name].value = cur ? (cur.startsWith("#") ? cur : baseHex(name)) : baseHex(name);
+    });
+  }
+  function applyVar(name, hex) {
+    var rgb = hexToRgb(hex);
+    document.documentElement.style.setProperty("--slate-" + name, hex);
+    // keep *-foreground readable-ish when base color changes (light text assumed)
+  }
+  function applyOverrides(map) {
+    allVars.forEach(function (n) { document.documentElement.style.removeProperty("--slate-" + n); });
+    if (map) Object.keys(map).forEach(function (k) { document.documentElement.style.setProperty("--slate-" + k, map[k]); });
+    refreshPickers();
+  }
+  document.getElementById("presetSel").addEventListener("change", function (e) {
+    applyOverrides(PRESETS[e.target.value]);
+  });
+  document.getElementById("resetTheme").addEventListener("click", function () {
+    document.getElementById("presetSel").value = "default";
+    applyOverrides(null);
+    showToast("Theme reset");
+  });
+  document.getElementById("copyCss").addEventListener("click", function () {
+    var lines = [], cs = getComputedStyle(document.documentElement);
+    allVars.forEach(function (n) {
+      var v = document.documentElement.style.getPropertyValue("--slate-" + n).trim();
+      if (v) lines.push("  --slate-" + n + ": " + v + ";");
+    });
+    if (!lines.length) { showToast("No overrides to copy"); return; }
+    copyText(":root {\n" + lines.join("\n") + "\n}", "CSS block copied");
+  });
+  refreshPickers();
+})();
+</script>
+</body>
+</html>
