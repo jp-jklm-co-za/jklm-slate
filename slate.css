@@ -354,8 +354,8 @@
 .slate-label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.375rem; }
 
 /* Misc */
-.slate ul, .slate ol { margin: 0 0 calc(var(--slate-spacing) * 3) 0; padding-left: 1.5rem; }
-.slate li { margin-bottom: calc(var(--slate-spacing) * 1.5); line-height: 1.5; }
+.slate ul, .slate ol { margin: 0 0 calc(var(--slate-spacing) * 3) 0; padding-left: 1.1rem; }
+.slate li { margin-bottom: calc(var(--slate-spacing) * 1); line-height: 1.5; padding-left: 0.15rem; }
 .slate li:last-child { margin-bottom: 0; }
 .slate ul { list-style: disc outside; }
 .slate ol { list-style: decimal outside; }
