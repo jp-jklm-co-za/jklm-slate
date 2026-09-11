@@ -1,6 +1,6 @@
 {
   "name": "@jklm/slate",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Lightweight CSS-only design system for JKLM mini-apps. TweakCN-style theme variables + Bootstrap-like utility/component classes, .slate-* prefixed.",
   "license": "MIT",
   "main": "slate.css",
