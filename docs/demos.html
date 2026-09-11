@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>@jklm/slate — Demo screens</title>
+<link rel="stylesheet" href="../slate.css">
+<style>
+  /* Demo chrome (not part of slate.css) */
+  body { margin:0; }
+  .dm-shell { display:flex; min-height:100vh; }
+  .dm-sidebar { width:230px; flex-shrink:0; border-right:1px solid var(--slate-border); background:var(--slate-card); position:sticky; top:0; height:100vh; overflow-y:auto; padding:1rem; }
+  .dm-sidebar a { display:block; padding:0.35rem 0.6rem; border-radius:var(--slate-radius-md); color:var(--slate-foreground); font-size:0.875rem; text-decoration:none; }
+  .dm-sidebar a:hover { background:var(--slate-muted); text-decoration:none; }
+  .dm-main { flex:1; padding:1.5rem 2rem 4rem; max-width:1200px; min-width:0; }
+  .dm-topbar { position:sticky; top:0; z-index:10; display:flex; align-items:center; gap:0.75rem; padding:0.75rem 1rem; background:var(--slate-background); border-bottom:1px solid var(--slate-border); }
+  .dm-section { margin-bottom:3rem; scroll-margin-top:4rem; }
+  .dm-frame { border:1px solid var(--slate-border); border-radius:var(--slate-radius-lg); overflow:hidden; background:var(--slate-background); }
+  .dm-frame-bar { display:flex; align-items:center; justify-content:space-between; padding:0.5rem 0.75rem; background:var(--slate-card); border-bottom:1px solid var(--slate-border); }
+  .dm-frame-label { font-size:0.75rem; font-family:var(--slate-font-mono); color:var(--slate-muted-foreground); }
+  .dm-code { display:none; border-top:1px solid var(--slate-border); background:var(--slate-popover); }
+  .dm-code.open { display:block; }
+  .dm-code pre { margin:0; padding:1rem; overflow-x:auto; font-family:var(--slate-font-mono); font-size:0.72rem; line-height:1.5; color:var(--slate-foreground); }
+  /* Nav demos */
+  .nv-top { display:flex; align-items:center; gap:1rem; padding:0.75rem 1rem; background:var(--slate-card); border-bottom:1px solid var(--slate-border); }
+  .nv-top a { color:var(--slate-muted-foreground); text-decoration:none; font-size:0.875rem; padding:0.3rem 0.6rem; border-radius:var(--slate-radius-md); }
+  .nv-top a:hover { color:var(--slate-foreground); background:var(--slate-muted); }
+  .nv-top a.active { color:var(--slate-primary); font-weight:600; }
+  .nv-side { display:flex; min-height:340px; }
+  .nv-side-nav { width:200px; flex-shrink:0; padding:1rem; background:var(--slate-card); border-right:1px solid var(--slate-border); }
+  .nv-side-nav a { display:block; padding:0.45rem 0.7rem; border-radius:var(--slate-radius-md); color:var(--slate-muted-foreground); text-decoration:none; font-size:0.875rem; margin-bottom:0.15rem; }
+  .nv-side-nav a.active { background:var(--slate-muted); color:var(--slate-foreground); font-weight:600; }
+  .nv-side-body { flex:1; padding:1.25rem; }
+  .nv-crumb { font-size:0.8rem; color:var(--slate-muted-foreground); }
+  /* Dashboard */
+  .dash { padding:1.25rem; }
+  .dash-head { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.75rem; margin-bottom:1rem; }
+  .stat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:0.75rem; margin-bottom:1rem; }
+  .stat { background:var(--slate-card); border:1px solid var(--slate-border); border-radius:var(--slate-radius-lg); padding:0.9rem 1rem; }
+  .stat-label { font-size:0.7rem; font-family:var(--slate-font-mono); color:var(--slate-muted-foreground); text-transform:uppercase; letter-spacing:0.05em; }
+  .stat-value { font-size:1.4rem; font-weight:700; margin-top:0.25rem; }
+  .stat-delta { font-size:0.72rem; margin-top:0.2rem; }
+  .bar-chart { display:flex; align-items:flex-end; gap:0.5rem; height:120px; margin:1rem 0; }
+  .bar { flex:1; background:var(--slate-primary); border-radius:var(--slate-radius-sm) var(--slate-radius-sm) 0 0; opacity:0.85; }
+  .bar.alt { background:var(--slate-accent); }
+  .activity { list-style:none; margin:0; padding:0; }
+  .activity li { display:flex; gap:0.6rem; padding:0.5rem 0; border-bottom:1px solid var(--slate-border); font-size:0.85rem; }
+  .activity li:last-child { border-bottom:none; }
+  .dot { width:8px; height:8px; border-radius:9999px; margin-top:0.4rem; flex-shrink:0; }
+  /* Login */
+  .login-wrap { display:flex; align-items:center; justify-content:center; min-height:420px; padding:2rem; background:
+    radial-gradient(circle at 20% 20%, var(--slate-muted), transparent 50%),
+    radial-gradient(circle at 80% 80%, var(--slate-muted), transparent 50%),
+    var(--slate-background); }
+  .login-card { width:100%; max-width:360px; background:var(--slate-card); border:1px solid var(--slate-border); border-radius:var(--slate-radius-lg); box-shadow:var(--slate-shadow-lg); padding:1.75rem; }
+  .login-card .slate-input { width:100%; margin-bottom:0.75rem; }
+  @media (max-width:800px){ .dm-sidebar{display:none;} .nv-side{flex-direction:column;} .nv-side-nav{width:100%; border-right:none; border-bottom:1px solid var(--slate-border);} }
+</style>
+</head>
+<body>
+<div class="slate dm-shell">
+  <aside class="dm-sidebar">
+    <h3 style="font-size:0.9rem; margin-bottom:0.75rem;"><a href="index.html" style="text-decoration:none; color:inherit;">← @jklm/slate</a></h3>
+    <a href="#nav-top">Nav — top bar</a>
+    <a href="#nav-side">Nav — sidebar</a>
+    <a href="#login">Login page</a>
+    <a href="#dash-analytics">Dashboard — analytics</a>
+    <a href="#dash-settings">Dashboard — settings</a>
+  </aside>
+  <div style="flex:1; min-width:0;">
+    <div class="dm-topbar">
+      <button class="slate-btn slate-btn-outline slate-btn-sm" onclick="toggleDark()">Toggle dark</button>
+      <span class="slate-text-sm slate-text-muted">Demo screens — every pixel uses slate tokens</span>
+    </div>
+    <main class="dm-main">
+
+      <section class="dm-section" id="nav-top">
+        <h1>Demo screens</h1>
+        <p class="slate-text-muted">Real compositions built only from slate components + tokens. Press <b>View HTML</b> on any screen to copy the markup.</p>
+        <h2 class="slate-mt-4">Nav — top bar</h2>
+        <div class="dm-frame">
+          <div class="dm-frame-bar"><span class="dm-frame-label">navbar.html</span><button class="slate-btn slate-btn-secondary slate-btn-sm" onclick="toggleCode(this)">View HTML</button></div>
+          <nav class="nv-top">
+            <strong style="font-size:0.95rem;">JKLM</strong>
+            <a class="active" href="#">Dashboard</a><a href="#">Projects</a><a href="#">Invoices</a><a href="#">Reports</a>
+            <span style="flex:1;"></span>
+            <span class="slate-badge slate-badge-primary">Pro</span>
+            <button class="slate-btn slate-btn-outline slate-btn-sm">JP Jacobs ▾</button>
+          </nav>
+          <div class="dm-code"><pre></pre></div>
+        </div>
+      </section>
+
+      <section class="dm-section" id="nav-side">
+        <h2>Nav — sidebar with breadcrumbs</h2>
+        <div class="dm-frame">
+          <div class="dm-frame-bar"><span class="dm-frame-label">sidebar.html</span><button class="slate-btn slate-btn-secondary slate-btn-sm" onclick="toggleCode(this)">View HTML</button></div>
+          <div class="nv-side">
+            <nav class="nv-side-nav">
+              <strong style="display:block; margin-bottom:0.75rem;">Acme App</strong>
+              <a class="active" href="#">🏠 Home</a><a href="#">📦 Orders</a><a href="#">👥 Customers</a><a href="#">📊 Analytics</a><a href="#">⚙️ Settings</a>
+            </nav>
+            <div class="nv-side-body">
+              <p class="nv-crumb">Home / Orders / <b style="color:var(--slate-foreground);">#1042</b></p>
+              <h3 class="slate-mt-2" style="margin-top:0.5rem;">Order #1042</h3>
+              <p class="slate-text-sm slate-text-muted">Placed 2 hours ago · <span class="slate-badge slate-badge-secondary">Processing</span></p>
+              <div class="slate-flex slate-gap-2" style="margin-top:1rem;">
+                <button class="slate-btn slate-btn-primary slate-btn-sm">Approve</button>
+                <button class="slate-btn slate-btn-outline slate-btn-sm">Hold</button>
+                <button class="slate-btn slate-btn-ghost slate-btn-sm">Cancel order</button>
+              </div>
+            </div>
+          </div>
+          <div class="dm-code"><pre></pre></div>
+        </div>
+      </section>
+
+      <section class="dm-section" id="login">
+        <h2>Login page</h2>
+        <div class="dm-frame">
+          <div class="dm-frame-bar"><span class="dm-frame-label">login.html</span><button class="slate-btn slate-btn-secondary slate-btn-sm" onclick="toggleCode(this)">View HTML</button></div>
+          <div class="login-wrap">
+            <div class="login-card">
+              <h2 style="margin-top:0;">Welcome back</h2>
+              <p class="slate-text-sm slate-text-muted" style="margin-bottom:1.25rem;">Sign in to your JKLM account.</p>
+              <input class="slate-input" type="email" placeholder="you@jklm.co.za">
+              <input class="slate-input" type="password" placeholder="Password">
+              <div class="slate-flex slate-items-center slate-justify-between slate-text-sm" style="margin-bottom:1rem;">
+                <label class="slate-flex slate-items-center slate-gap-2"><input type="checkbox" checked> Remember me</label>
+                <a class="slate-link" href="#">Forgot?</a>
+              </div>
+              <button class="slate-btn slate-btn-primary" style="width:100%;">Sign in</button>
+              <p class="slate-text-sm slate-text-muted" style="text-align:center; margin-top:1rem;">No account? <a class="slate-link" href="#">Request access</a></p>
+            </div>
+          </div>
+          <div class="dm-code"><pre></pre></div>
+        </div>
+      </section>
+
+      <section class="dm-section" id="dash-analytics">
+        <h2>Dashboard — analytics</h2>
+        <div class="dm-frame">
+          <div class="dm-frame-bar"><span class="dm-frame-label">dashboard.html</span><button class="slate-btn slate-btn-secondary slate-btn-sm" onclick="toggleCode(this)">View HTML</button></div>
+          <div class="dash">
+            <div class="dash-head">
+              <div><h3 style="margin:0;">Overview</h3><p class="slate-text-sm slate-text-muted" style="margin:0.2rem 0 0;">Sep 2026 · last 30 days</p></div>
+              <div class="slate-flex slate-gap-2">
+                <button class="slate-btn slate-btn-outline slate-btn-sm">Last 30 days ▾</button>
+                <button class="slate-btn slate-btn-primary slate-btn-sm">+ New report</button>
+              </div>
+            </div>
+            <div class="stat-grid">
+              <div class="stat"><div class="stat-label">Revenue</div><div class="stat-value">R 84,320</div><div class="stat-delta slate-text-primary">▲ 12.4% vs last month</div></div>
+              <div class="stat"><div class="stat-label">Orders</div><div class="stat-value">1,204</div><div class="stat-delta slate-text-primary">▲ 3.1%</div></div>
+              <div class="stat"><div class="stat-label">Refunds</div><div class="stat-value">R 2,140</div><div class="stat-delta slate-text-destructive">▲ 8.0%</div></div>
+              <div class="stat"><div class="stat-label">Active users</div><div class="stat-value">342</div><div class="stat-delta slate-text-muted">— flat</div></div>
+            </div>
+            <div class="slate-grid" style="grid-template-columns:2fr 1fr; gap:0.75rem;">
+              <div class="stat">
+                <div class="stat-label">Revenue by week</div>
+                <div class="bar-chart">
+                  <div class="bar" style="height:45%"></div><div class="bar alt" style="height:62%"></div><div class="bar" style="height:38%"></div><div class="bar" style="height:74%"></div><div class="bar alt" style="height:55%"></div><div class="bar" style="height:88%"></div><div class="bar alt" style="height:70%"></div><div class="bar" style="height:96%"></div>
+                </div>
+                <div class="slate-flex slate-justify-between slate-text-xs slate-text-muted"><span>W1</span><span>W4</span><span>W8</span></div>
+              </div>
+              <div class="stat">
+                <div class="stat-label">Recent activity</div>
+                <ul class="activity">
+                  <li><span class="dot" style="background:var(--slate-success);"></span> Invoice #2201 paid — R4,500</li>
+                  <li><span class="dot" style="background:var(--slate-warning);"></span> Refund requested — #1039</li>
+                  <li><span class="dot" style="background:var(--slate-primary);"></span> New customer — Acme (Pty) Ltd</li>
+                  <li><span class="dot" style="background:var(--slate-destructive);"></span> Payment failed — #1044</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="dm-code"><pre></pre></div>
+        </div>
+      </section>
+
+      <section class="dm-section" id="dash-settings">
+        <h2>Dashboard — settings form</h2>
+        <div class="dm-frame">
+          <div class="dm-frame-bar"><span class="dm-frame-label">settings.html</span><button class="slate-btn slate-btn-secondary slate-btn-sm" onclick="toggleCode(this)">View HTML</button></div>
+          <div class="dash" style="max-width:560px;">
+            <h3 style="margin-top:0;">Workspace settings</h3>
+            <label class="slate-label">Company name</label>
+            <input class="slate-input" value="JKLM (Pty) Ltd">
+            <label class="slate-label slate-mt-3">Billing email</label>
+            <input class="slate-input" type="email" value="accounts@jklm.co.za">
+            <label class="slate-label slate-mt-3">Currency</label>
+            <select class="slate-select">
+              <option selected>ZAR — South African Rand</option><option>USD — US Dollar</option><option>EUR — Euro</option>
+            </select>
+            <div class="slate-alert slate-alert-info slate-mt-3 slate-text-sm">Changes to billing details require owner approval.</div>
+            <div class="slate-flex slate-gap-2" style="margin-top:1.25rem;">
+              <button class="slate-btn slate-btn-primary">Save changes</button>
+              <button class="slate-btn slate-btn-ghost">Discard</button>
+            </div>
+          </div>
+          <div class="dm-code"><pre></pre></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+<script>
+  function toggleDark(){ document.documentElement.classList.toggle('dark'); }
+  function toggleCode(btn){
+    const code = btn.closest('.dm-frame').querySelector('.dm-code');
+    const open = code.classList.toggle('open');
+    btn.textContent = open ? 'Hide HTML' : 'View HTML';
+    if (open && !code.querySelector('pre').textContent.trim()) {
+      // Grab everything between the frame bar and the code block = the actual demo markup
+      const frame = btn.closest('.dm-frame');
+      let html = '';
+      for (const node of frame.children) {
+        if (node.classList.contains('dm-frame-bar') || node.classList.contains('dm-code')) continue;
+        html += node.outerHTML + '\n';
+      }
+      code.querySelector('pre').textContent = html.trim();
+    }
+  }
+</script>
+</body>
+</html>
